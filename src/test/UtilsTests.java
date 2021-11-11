@@ -3,6 +3,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import shapes.*;
 
+import processing.core.PVector;
+
 
 public class UtilsTests {
     @Test
@@ -20,13 +22,13 @@ public class UtilsTests {
     @Test
     public void testPointOnCircle() {
 
-        var center = new Point(0,0);
+        PVector center = new PVector(0,0);
         float radius = 1;
-        var circle = new Circle(center,radius);
+        Circle circle = new Circle(center,radius);
         double radians = Utils.degreeToRadians(90);
 
         // Given
-        var pointOnCircle = Utils.pointOnCircle(circle, radians);
+        PVector pointOnCircle = Utils.pointOnCircle(circle, radians);
         // When
 
         // Then
@@ -38,14 +40,14 @@ public class UtilsTests {
     @Test
     public void testAngleForPointOnCircle() {
 
-        var center = new Point(0,0);
+        PVector center = new PVector(0,0);
         float radius = 1;
-        var circle = new Circle(center,radius);
-        
-        var pointOnCircle = new Point(0, 1);
+        Circle circle = new Circle(center,radius);
+
+        PVector pointOnCircle = new PVector(0, 1);
 
         // Given
-        var angleForPointOnCircle = Utils.angleForPointOnCircle(circle, pointOnCircle);
+        double angleForPointOnCircle = Utils.angleForPointOnCircle(circle, pointOnCircle);
         // When
 
         // Then

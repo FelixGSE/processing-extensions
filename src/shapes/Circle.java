@@ -1,11 +1,13 @@
 package shapes;
 
+import processing.core.PVector;
+
 public class Circle {
 
-    Point center;
-    double radius;
+    public PVector center;
+    public double radius;
 
-    public Circle(Point circleCenter, double circleRadius ) {
+    public Circle(PVector circleCenter, double circleRadius ) {
         center = circleCenter; 
         radius = circleRadius;
       };

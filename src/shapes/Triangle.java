@@ -1,12 +1,14 @@
 package shapes;
 
+import processing.core.PVector;
+
 public class Triangle {
 
-    public Point A;
-    public Point B;
-    public Point C;
+    public PVector A;
+    public PVector B;
+    public PVector C;
 
-    public Triangle(Point A, Point B, Point C) {
+    public Triangle(PVector A, PVector B, PVector C) {
         this.A = A; 
         this.B = B;
         this.C = C;
