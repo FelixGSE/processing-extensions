@@ -1,4 +1,4 @@
-package test;
+package test.shapes;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import modules.shapes.*;

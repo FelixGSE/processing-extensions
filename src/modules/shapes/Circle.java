@@ -1,4 +1,4 @@
-package shapes;
+package modules.shapes;
 
 import processing.core.PVector;
 import processing.core.PApplet;
@@ -27,7 +27,7 @@ public class Circle{
 
     public void draw(PApplet sketch){
 
-        sketch.circle(center.x,center.y,radius);
+        sketch.circle(center.x,center.y,radius * 2);
     }
 
     

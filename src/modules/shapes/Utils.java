@@ -1,4 +1,4 @@
-package shapes;
+package modules.shapes;
 
 import processing.core.PApplet;
 import processing.core.PVector;

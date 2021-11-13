@@ -1,4 +1,4 @@
-package shapes;
+package modules.shapes;
 
 public class Main {
 

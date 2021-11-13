@@ -1,4 +1,4 @@
-package shapes;
+package modules.shapes;
 
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -82,12 +82,17 @@ public class Triangle {
 
     public PVector chooseRandomPointOnEdge(String side) {
 
-        return switch (side) {
-            case "a" -> Utils.randomPointOnLine(C, B);
-            case "b" -> Utils.randomPointOnLine(A, C);
-            case "c" -> Utils.randomPointOnLine(A, B);
-            default -> throw new IllegalArgumentException();
-        };
+        if(side.equals("a")){
+            return Utils.randomPointOnLine(C, B);
+        } else if (side.equals("b")) {
+            return Utils.randomPointOnLine(A, C);
+
+        } else if (side.equals("c")){
+            return Utils.randomPointOnLine(A, B);
+        } else {
+            throw new IllegalArgumentException();
+        }
+
 
     }
 

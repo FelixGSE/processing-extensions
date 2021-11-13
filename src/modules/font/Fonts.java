@@ -1,4 +1,4 @@
-package font;
+package modules.font;
 
 public class Fonts {
     
