@@ -1,7 +1,7 @@
 package test;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import shapes.*;
+import modules.shapes.*;
 
 import processing.core.PVector;
 

@@ -1,7 +1,7 @@
 package test;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import shapes.*;
+import modules.shapes.*;
 import processing.core.PVector;
 
 
@@ -11,7 +11,8 @@ public class CircleTests {
 
         // Given
         PVector center = new PVector(0,0);
-        double radius = 1;
+        float radius = 1;
+
         Circle circle = new Circle(center, radius);
         double area = circle.area();
         double approximateCircleArea = 3.141592653589793;
