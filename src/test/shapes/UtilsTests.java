@@ -3,6 +3,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import modules.shapes.*;
 
+import java.util.ArrayList;
+import java.util.Random;
 import processing.core.PVector;
 
 
@@ -54,5 +56,35 @@ public class UtilsTests {
                 
         assertEquals(Utils.degreeToRadians(90),angleForPointOnCircle,0.001);
         
+    }
+
+    @Test
+    public void testLineSubdivision() {
+        long seed =20;
+        Random random = new Random();
+        random.setSeed(seed);
+
+        PVector start = new PVector(0,0);
+        PVector end = new PVector(1000,0);
+        Line lineToSplit = new Line(start, end );
+
+        ArrayList<Line> listOfLines = Utils.divideLineIntoUniformRandomParts(lineToSplit,1);
+
+//        for(int i = 0; i<=listOfLines.size();i++){
+//            Line line = listOfLines.get(i);
+//            start = line.start;
+//            end = line.end;
+//            System.out.println(String.format("START X: %f, START Y: %f", start.x,start.y));
+//            System.out.println(String.format("END X: %f, END Y: %f", end.x,end.y));
+//        }
+
+        // Given
+
+        // When
+
+        // Then
+
+        assertEquals(4,listOfLines.size());
+
     }
 }
