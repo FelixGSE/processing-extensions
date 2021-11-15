@@ -15,6 +15,8 @@ public class Utils {
 
     }
 
+    ;
+
     public static double degreeToRadians(double degree) {
         return degree * Math.PI / 180;
     }
@@ -58,6 +60,7 @@ public class Utils {
         return new PVector(doubleToFloat(x), doubleToFloat(y));
     }
 
+
     ;
 
     public static PVector randomPointInCircle(Circle circle) {
@@ -73,6 +76,26 @@ public class Utils {
     }
 
     ;
+
+    public static PVector randomPointOnCircle(Circle circle) {
+
+        double theta = Math.random() * 2 * Math.PI;
+
+        return pointOnCircle(circle, theta);
+
+    }
+
+    ;
+
+    public static PVector randomPointOnCircleBetweenAngles(Circle circle, float start, float stop) {
+
+        PVector degrees = Utils.makePositiveRealLine(start, stop).getRandomPointIn();
+        return pointOnCircle(circle, Utils.degreeToRadians(Utils.floatToDouble(degrees.x)));
+
+    }
+
+    ;
+
 
     public static float angleForPointOnCircle(Circle circle, PVector point) {
 
@@ -100,11 +123,15 @@ public class Utils {
 
     }
 
+    ;
+
     public static boolean pointIsOutsideOfCircle(Circle circle, PVector point) {
 
         return circle.center.dist(point) >= circle.radius;
 
     }
+
+    ;
 
     public static boolean pointIsOnCircle(Circle circle, PVector point) {
 
@@ -113,6 +140,8 @@ public class Utils {
 
     }
 
+    ;
+
     public static PVector lineMidPoint(Line line) {
         float x = doubleToFloat(0.5 * line.start.x + 0.5 * line.end.x);
         float y = doubleToFloat(0.5 * line.start.y + 0.5 * line.end.y);
@@ -120,6 +149,8 @@ public class Utils {
         return new PVector(x, y);
 
     }
+
+    ;
 
     public static PVector uniformRandomPointOnLine(PVector A, PVector B) {
 
@@ -141,17 +172,20 @@ public class Utils {
         return new PVector(x, y);
 
     }
+
     ;
 
     public static Line shortenLineFromBothEnds(Line line, double t) {
-        double split = t/2;
+        double split = t / 2;
 
-        PVector startPoint = shortenLineFromOrigin(line,split);
-        PVector endPoint = shortenLineFromOrigin(line,1- split);
+        PVector startPoint = shortenLineFromOrigin(line, split);
+        PVector endPoint = shortenLineFromOrigin(line, 1 - split);
 
         return new Line(startPoint, endPoint);
 
     }
+
+    ;
 
     public static PVector lineIntersection(Line x, Line y) {
 
@@ -171,6 +205,12 @@ public class Utils {
 
     ;
 
+    public static Line makePositiveRealLine(float lower, float upper) {
+        return new Line(new PVector(lower, 0), new PVector(upper, 0));
+    }
+
+    ;
+
     public static ArrayList<PVector> divideLineIntoEqualParts(Line line, int n) {
         double a = 1.0 / n;
         ArrayList<PVector> outputs = new ArrayList<>();
@@ -186,27 +226,47 @@ public class Utils {
 
     ;
 
-    public static PVector randomPointOnLine(Line line){
-        return shortenLineFromOrigin(line,Math.random());
+    public static ArrayList<PVector> divideLineInRandomParts(Line line, int n) {
+        ArrayList<PVector> outputs = new ArrayList<>();
+        for (int i = 0; i <= (n - 1); i++) {
+            double rand = Math.random();
+            PVector point = Utils.shortenLineFromOrigin(line, rand);
+            outputs.add(point);
+        }
+        ;
+
+        return outputs;
+    }
+
+    ;
+
+    public static PVector randomPointOnLine(Line line) {
+        return shortenLineFromOrigin(line, Math.random());
 
     }
 
-    public static double myEucledianDistance(PVector A, PVector B){
-        return Math.sqrt( Math.pow( (A.x - B.x) , 2 ) + Math.pow( (A.y - B.y), 2) );
-    };
+    ;
 
-    public static ArrayList<Line> divideLineIntoUniformRandomParts(Line line, int depth){
+    public static double myEucledianDistance(PVector A, PVector B) {
+        return Math.sqrt(Math.pow((A.x - B.x), 2) + Math.pow((A.y - B.y), 2));
+    }
+
+    ;
+
+    public static ArrayList<Line> divideLineIntoUniformRandomParts(Line line, int depth) {
 
         ArrayList<Line> lines = new ArrayList<>();
         lines.add(line);
 
-        uniformSubdivideLine(lines,line,depth);
+        uniformSubdivideLine(lines, line, depth);
 
         return lines;
 
     }
 
-    private static void uniformSubdivideLine(ArrayList<Line> lineList,Line line,int depth) {
+    ;
+
+    private static void uniformSubdivideLine(ArrayList<Line> lineList, Line line, int depth) {
         if (depth >= 0) {
             PVector midpoint = line.getMidPoint();
 
@@ -224,8 +284,8 @@ public class Utils {
 
         }
     }
-            ;
 
+    ;
 
 
     public static PVector randomPointInTriangle(Triangle triangle) {
@@ -242,6 +302,8 @@ public class Utils {
 
     }
 
+    ;
+
     public static void hLine(PApplet sketch, float y) {
 
         sketch.line(0, y, sketch.width, y);
@@ -251,7 +313,7 @@ public class Utils {
 
     public static void drawPoint(PApplet sketch, PVector point, float size) {
 
-        sketch.circle(point.x,point.y,size);
+        sketch.circle(point.x, point.y, size);
     }
 
     ;
@@ -287,6 +349,16 @@ public class Utils {
 //
 //    ;
 
+    public static PVector pointOnElipse(Ellipse ellipse, double angle) {
+
+        double x = ellipse.center.x + ellipse.width * Math.cos(angle);
+        double y = ellipse.center.y + ellipse.height * Math.sin(angle);
+
+        return new PVector(doubleToFloat(x), doubleToFloat(y));
+    }
+
+    ;
+
     public static PVector rotatePointOnEllipse(Ellipse ellipse, PVector point) {
         double radians = radiansToDegree(ellipse.rotation);
         float cosA = doubleToFloat(Math.cos(radians));
@@ -297,6 +369,20 @@ public class Utils {
         float newY = ellipse.center.y + dX * sinA - dY * cosA;
 
         return new PVector(newX, newY);
+    }
+
+    ;
+
+    public void drawtestCurve(PApplet sketch) {
+        sketch.beginShape();
+        sketch.curveVertex(336, 364);
+        sketch.curveVertex(336, 364);
+        sketch.curveVertex(272, 76);
+        sketch.curveVertex(84, 68);
+        sketch.curveVertex(128, 400);
+        sketch.curveVertex(128, 400);
+        sketch.endShape();
+
     }
 
     ;
@@ -324,6 +410,8 @@ public class Utils {
         }
     }
 
+    ;
+
     public static boolean numberIsEven(Integer n) {
 
         return (n % 2) == 0;
@@ -347,16 +435,24 @@ public class Utils {
 
     ;
 
-    public static ArrayList<PVector> shiftVertexList(ArrayList<PVector> vertexList, PVector shift ){
+    public static ArrayList<PVector> shiftVertexList(ArrayList<PVector> vertexList, PVector shift) {
         ArrayList<PVector> shifted = new ArrayList<>();
 
-        for(int i = 0; i <= vertexList.size(); i++){
+        for (int i = 0; i <= vertexList.size(); i++) {
             PVector shiftedVertex = vertexList.get(i).copy().add(shift);
             shifted.add(shiftedVertex);
         }
 
         return shifted;
     }
+
+    ;
+
+    public static String getRandom(String[] array) {
+        int rnd = new java.util.Random().nextInt(array.length);
+        return array[rnd];
+    }
+
     ;
 
 }
