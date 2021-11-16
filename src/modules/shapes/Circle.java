@@ -10,6 +10,7 @@ public class Circle {
     public PVector center;
     public float radius;
     public float diameter;
+    public float globalRotation;
 
     public Circle(PVector center, float radius) {
         this.center = center;
@@ -30,6 +31,19 @@ public class Circle {
 
     public void shiftMe(PVector mover) {
         this.center.add(mover);
+    }
+
+    ;
+
+    public Circle getJittered(float radius) {
+        return new Circle(Utils.getCircularJitteredPoint(this.center,radius), this.radius);
+
+    }
+
+    ;
+
+    public void jitterMe(float radius) {
+        this.center = Utils.getCircularJitteredPoint(this.center,radius);
     }
 
     ;
@@ -99,13 +113,15 @@ public class Circle {
 
         ArrayList<PVector> degreeLine = Utils.makePositiveRealLine(360).divideInEqualParts(n);
         ArrayList<NotReallyAnArc> arcList = new ArrayList<>();
-        for (int i = 0; i <= degreeLine.size() - 1; i++) {
+        for (int i = 0; i <= degreeLine.size() - 2; i++) {
+
             PVector A = this.center.copy();
-            double lowerAngleInRadians = Utils.floatToDouble(degreeLine.get(i).x);
+
+            double lowerAngleInRadians = Utils.degreeToRadians(degreeLine.get(i).x);
             PVector B = Utils.pointOnCircle(this, lowerAngleInRadians);
 
-            double upperAngleInRadians = Utils.floatToDouble(degreeLine.get(i + 1).x);
-            PVector C = Utils.pointOnCircle(this, lowerAngleInRadians);
+            double upperAngleInRadians = Utils.degreeToRadians(degreeLine.get(i + 1).x);
+            PVector C = Utils.pointOnCircle(this, upperAngleInRadians);
 
             NotReallyAnArc currentArc = new NotReallyAnArc(A, B, C, this);
             arcList.add(currentArc);
@@ -124,6 +140,11 @@ public class Circle {
     }
 
     ;
+
+    public void drawRandomPointIn(PApplet sketch) {
+
+        sketch.circle(center.x, center.y, radius * 2);
+    }
 
 
 }

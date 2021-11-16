@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class Utils {
@@ -98,13 +99,67 @@ public class Utils {
 
 
     public static float angleForPointOnCircle(Circle circle, PVector point) {
-
-        double angle = Math.acos(((point.x - circle.center.x) / circle.radius));
-
+        double angle = Math.atan2(point.y - circle.center.y, point.x - circle.center.x);
+//        double angle = Math.acos(((point.x - circle.center.x) / circle.radius));
+//
         return doubleToFloat(angle);
     }
 
     ;
+
+    public static float angleForPointOnCircleInDegree(Circle circle, PVector point) {
+        double angle = Math.toDegrees(Math.atan2(point.y - circle.center.y, point.x - circle.center.x));
+//        double angle = Math.acos(((point.x - circle.center.x) / circle.radius));
+//
+        return doubleToFloat(angle);
+    }
+
+    ;
+
+    public static double findAngle(Circle circle, PVector point){
+        double beta, alfa;
+
+        double distanceX = Math.abs(Math.abs(point.x) - Math.abs(circle.center.x));
+        double distanceY = Math.abs(Math.abs(point.y) - Math.abs(circle.center.y));
+
+//        // check the point is on the circle or not
+//        // with euchlid
+//        if (circle.radius != Math.sqrt(x * x + y * y)) {
+//            return -1;
+//        }
+
+        if (point.x >= circle.center.x && point.y <= circle.center.y) {
+            // find tangent
+            beta = Math.atan(distanceY / distanceX);
+            alfa = 90 - beta;
+            return alfa;
+        }
+        // 90-180 -> second area
+        else if (point.x >= circle.center.x && point.y >= circle.center.y) {
+            beta = Math.atan(distanceY / distanceX);
+            alfa = 90 + beta;
+            return alfa;
+        }
+        // 180 - -90 -> third area
+        else if (point.x <= circle.center.x && point.y >= circle.center.y) {
+            beta = Math.atan(distanceY / distanceX);
+            alfa = 270 - beta;
+            return alfa;
+        }
+        // -90 - 0 -> forth area
+        else if (point.x <= circle.center.x && point.y <= circle.center.y) {
+            beta = Math.atan(distanceY / distanceX);
+            alfa = 270 + beta;
+            if (alfa == 360) {
+                alfa = 0;
+            }
+            return alfa;
+        }
+        else {
+            return -1;
+        }
+    }
+
 
     public static PVector oppositePointOnCircle(Circle circle, PVector B) {
 
@@ -164,7 +219,7 @@ public class Utils {
 
     ;
 
-    public static PVector shortenLineFromOrigin(Line line, double t) {
+    public static PVector scaleLineFromOrigin(Line line, double t) {
 
         float x = doubleToFloat(line.start.x + t * (line.end.x - line.start.x));
         float y = doubleToFloat(line.start.y + t * (line.end.y - line.start.y));
@@ -178,8 +233,8 @@ public class Utils {
     public static Line shortenLineFromBothEnds(Line line, double t) {
         double split = t / 2;
 
-        PVector startPoint = shortenLineFromOrigin(line, split);
-        PVector endPoint = shortenLineFromOrigin(line, 1 - split);
+        PVector startPoint = scaleLineFromOrigin(line, split);
+        PVector endPoint = scaleLineFromOrigin(line, 1 - split);
 
         return new Line(startPoint, endPoint);
 
@@ -216,7 +271,7 @@ public class Utils {
         ArrayList<PVector> outputs = new ArrayList<>();
         for (int i = n; i >= 0; i--) {
             double scalingFactor = 1 - i * a;
-            PVector point = shortenLineFromOrigin(line, scalingFactor);
+            PVector point = scaleLineFromOrigin(line, scalingFactor);
             outputs.add(point);
         }
         ;
@@ -225,23 +280,52 @@ public class Utils {
     }
 
     ;
+
 
     public static ArrayList<PVector> divideLineInRandomParts(Line line, int n) {
+
+        ArrayList<Double> randomSplits = arrayWithRandomNumbers(n-1);
+        Collections.sort(randomSplits);
+
         ArrayList<PVector> outputs = new ArrayList<>();
-        for (int i = 0; i <= (n - 1); i++) {
-            double rand = Math.random();
-            PVector point = Utils.shortenLineFromOrigin(line, rand);
+        outputs.add(line.start);
+        for (int i = 0; i <= randomSplits.size() - 1; i++) {
+            PVector point = Utils.scaleLineFromOrigin(line, randomSplits.get(i));
             outputs.add(point);
+        }
+        ;
+        outputs.add(line.end);
+        return outputs;
+    }
+
+    public static ArrayList<Line> pointCollectionToLineCollection(ArrayList<PVector> pointArray) {
+        ArrayList<Line> outputs = new ArrayList<>();
+
+        for (int i = 0; i <= pointArray.size() - 2 ; i++) {
+            Line currentLine = new Line(pointArray.get(i), pointArray.get(i+1));
+            outputs.add(currentLine);
         }
         ;
 
         return outputs;
     }
 
+
     ;
 
+    public static ArrayList<Double> arrayWithRandomNumbers(int n) {
+        ArrayList<Double> arrayWithRandomNumbers = new ArrayList<>();
+        for (int i = 1; i <= n ; i++) {
+            double rand = Math.random();
+            arrayWithRandomNumbers.add(rand);
+        }
+        ;
+
+        return arrayWithRandomNumbers;
+    }
+
     public static PVector randomPointOnLine(Line line) {
-        return shortenLineFromOrigin(line, Math.random());
+        return scaleLineFromOrigin(line, Math.random());
 
     }
 
@@ -454,6 +538,21 @@ public class Utils {
     }
 
     ;
+
+    public static PVector getCircularJitteredPoint(PVector point, float radius){
+        return new Circle(point,radius).computeRandomPointIn();
+
+    }
+
+    public static PVector getVericalJitteredPoint(PVector point, float lower, float upper){
+        return new PVector();
+
+    }
+
+    public static PVector getHorizontalJitteredPoint(PVector point, float lower, float upper){
+        return new PVector();
+
+    }
 
 }
 

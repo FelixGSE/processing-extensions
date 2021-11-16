@@ -46,6 +46,21 @@ public class Line {
 
     ;
 
+    public Line getRotated(float degrees) {
+
+        PVector endRotated = new Circle(start,length()).getPointOnCircleForAngle(degrees);
+
+        return new Line(start,endRotated);
+    }
+
+    ;
+
+    public void rotateMe(float degrees) {
+        this.end = new Circle(start,length()).getPointOnCircleForAngle(degrees);
+    }
+
+    ;
+
     public float length() {
         return start.dist(end);
 

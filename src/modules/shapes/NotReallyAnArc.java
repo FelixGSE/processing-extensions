@@ -30,13 +30,21 @@ public class NotReallyAnArc {
         Circle newRefCircle = refCircle.getShifted(mover);
         return new NotReallyAnArc(newA, newB, newC, newRefCircle);
 
-    }
+    };
+
+    public Line segmentC(){
+        return new Line(A,B);
+    };
+
+    public Line segmentB(){
+        return new Line(A,C);
+    };
 
     public void draw(PApplet sketch) {
         sketch.line(A.x, A.y, B.x, B.y);
         sketch.line(A.x, A.y, C.x, C.y);
-        sketch.arc(refCircle.center.x, refCircle.center.y, refCircle.radius, refCircle.radius, refCircleAngleStart, refCircleAngleEnd);
-    }
+        sketch.arc(refCircle.center.x, refCircle.center.y, refCircle.radius * 2, refCircle.radius * 2, refCircleAngleStart, refCircleAngleEnd);
+    };
 
 
 }

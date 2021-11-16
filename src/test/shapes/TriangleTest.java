@@ -22,7 +22,7 @@ public class TriangleTest {
         System.out.println(String.format("Test a: %f", triangle.a()));
         System.out.println(String.format("Test b: %f", triangle.b()));
         System.out.println(String.format("Test c: %f", triangle.c()));
-        System.out.println(String.format("Actual X: %f", triangle.aTest()));
+        // System.out.println(String.format("Actual X: %f", triangle.aTest()));
 
         System.out.println(Math.pow(triangle.a(), 2));
 

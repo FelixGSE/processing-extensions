@@ -8,6 +8,7 @@ public class Triangle {
     public PVector A;
     public PVector B;
     public PVector C;
+    public float globalRotation;
 
     public Triangle(PVector A, PVector B, PVector C) {
         this.A = A;
@@ -19,9 +20,9 @@ public class Triangle {
 
     public Triangle getScaled(float factor) {
 
-        PVector newA = Utils.shortenLineFromOrigin(lineFromInnerCircleToA(), factor);
-        PVector newB = Utils.shortenLineFromOrigin(lineFromInnerCircleToB(), factor);
-        PVector newC = Utils.shortenLineFromOrigin(lineFromInnerCircleToC(), factor);
+        PVector newA = Utils.scaleLineFromOrigin(lineFromInnerCircleToA(), factor);
+        PVector newB = Utils.scaleLineFromOrigin(lineFromInnerCircleToB(), factor);
+        PVector newC = Utils.scaleLineFromOrigin(lineFromInnerCircleToC(), factor);
 
         return new Triangle(newA, newB, newC);
     }
@@ -29,9 +30,9 @@ public class Triangle {
     ;
 
     public void scaleMe(float factor) {
-        this.A = Utils.shortenLineFromOrigin(lineFromInnerCircleToA(), factor);
-        this.B = Utils.shortenLineFromOrigin(lineFromInnerCircleToB(), factor);
-        this.C = Utils.shortenLineFromOrigin(lineFromInnerCircleToC(), factor);
+        this.A = Utils.scaleLineFromOrigin(lineFromInnerCircleToA(), factor);
+        this.B = Utils.scaleLineFromOrigin(lineFromInnerCircleToB(), factor);
+        this.C = Utils.scaleLineFromOrigin(lineFromInnerCircleToC(), factor);
     }
 
     ;
@@ -49,6 +50,47 @@ public class Triangle {
         this.A.add(mover);
         this.B.add(mover);
         this.C.add(mover);
+    }
+
+    ;
+
+    public Triangle getRotated(float degrees) {
+
+        float radians = Utils.doubleToFloat(Utils.degreeToRadians(degrees));
+        PVector newA = this.A.copy().rotate(radians);
+        PVector newB = this.B.copy().rotate(radians);
+        PVector newC = this.C.copy().rotate(radians);
+        return new Triangle(newA,newB,newC);
+
+    }
+
+    ;
+
+    public void rotateMe(float degrees) {
+        float radians = Utils.doubleToFloat(Utils.degreeToRadians(degrees));
+        this.A.rotate(radians);
+        this.B.rotate(radians);
+        this.C.rotate(radians);
+    }
+
+    ;
+
+    public Triangle getJittered(float radius) {
+
+        PVector newA = Utils.getCircularJitteredPoint(this.A,radius);
+        PVector newB = Utils.getCircularJitteredPoint(this.B,radius);
+        PVector newC = Utils.getCircularJitteredPoint(this.C,radius);
+
+        return new Triangle(newA,newB,newC);
+
+    }
+
+    ;
+
+    public void jitterMe(float radius) {
+        this.A.add(Utils.getCircularJitteredPoint(this.A,radius));
+        this.B.add(Utils.getCircularJitteredPoint(this.B,radius));
+        this.C.add(Utils.getCircularJitteredPoint(this.C,radius));
     }
 
     ;
@@ -196,6 +238,40 @@ public class Triangle {
     }
 
     ;
+
+    public float distanceFromInnerCircleCenterToA() {
+        return lineFromInnerCircleToA().length();
+    };
+
+    public float distanceFromInnerCircleCenterToB() {
+        return lineFromInnerCircleToB().length();
+    };
+
+    public float distanceFromInnerCircleCenterToC() {
+        return lineFromInnerCircleToC().length();
+    };
+
+    public PVector pointOnInnerCirclePointToA() {
+        Circle inner = getInnerCircle();
+        double ratio = inner.radius / distanceFromInnerCircleCenterToA();
+        Line line = new Line(inner.center, A);
+        return Utils.scaleLineFromOrigin(line,ratio);
+    };
+
+    public PVector pointOnInnerCirclePointToB() {
+        Circle inner = getInnerCircle();
+        double ratio = inner.radius / distanceFromInnerCircleCenterToB();
+        Line line = new Line(inner.center, B);
+        return Utils.scaleLineFromOrigin(line,ratio);
+    };
+
+    public PVector pointOnInnerCirclePointToC() {
+        Circle inner = getInnerCircle();
+        double ratio = inner.radius / distanceFromInnerCircleCenterToC();
+        Line line = new Line(inner.center, C);
+        return Utils.scaleLineFromOrigin(line,ratio);
+    };
+
 
     public PVector computeRandomPointOn() {
 
