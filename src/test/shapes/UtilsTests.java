@@ -49,7 +49,7 @@ public class UtilsTests {
         PVector pointOnCircle = new PVector(0, 1);
 
         // Given
-        double angleForPointOnCircle = Utils.angleForPointOnCircle(circle, pointOnCircle);
+        double angleForPointOnCircle = Utils.angleForPointOnCircleInDegrees(circle, pointOnCircle);
         // When
 
         // Then

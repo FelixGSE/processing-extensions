@@ -17,8 +17,8 @@ public class NotReallyAnArc {
         this.B = B;
         this.C = C;
         this.refCircle = refCircle;
-        this.refCircleAngleStart = Utils.angleForPointOnCircle(refCircle, B);
-        this.refCircleAngleEnd = Utils.angleForPointOnCircle(refCircle, C);
+        this.refCircleAngleStart = Utils.angleForPointOnCircleInDegrees(refCircle, B);
+        this.refCircleAngleEnd = Utils.angleForPointOnCircleInDegrees(refCircle, C);
     }
 
     ;
@@ -43,7 +43,9 @@ public class NotReallyAnArc {
     public void draw(PApplet sketch) {
         sketch.line(A.x, A.y, B.x, B.y);
         sketch.line(A.x, A.y, C.x, C.y);
-        sketch.arc(refCircle.center.x, refCircle.center.y, refCircle.radius * 2, refCircle.radius * 2, refCircleAngleStart, refCircleAngleEnd);
+
+        sketch.arc(refCircle.center.x,
+                refCircle.center.y, refCircle.radius * 2, refCircle.radius * 2, refCircleAngleStart, refCircleAngleEnd);
     };
 
 

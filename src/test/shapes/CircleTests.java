@@ -93,37 +93,21 @@ public class CircleTests {
     }
 
     @Test
-    public void angleForPointOnCircle() {
+    public void testPointMapping() {
 
-        PVector center = new PVector(0,0);
-        float radius = 1;
+        PVector center = new PVector(400,200);
+        float radius =100;
         Circle circle = new Circle(center,radius);
 
-        PVector A = new PVector(1,0);
-        double angleA = Utils.findAngle(circle, A);
-        System.out.println(String.format("Degree A: %f",angleA));
-
-        PVector B = new PVector(0,-1);
-        double angleB = Utils.findAngle(circle, B);
-        System.out.println(String.format("Degree B: %f",angleB));
-
-        PVector C = new PVector(-1,0);
-        double angleC = Utils.findAngle(circle, C);
-        System.out.println(String.format("Degree B: %f",angleC));
-
-        PVector D = new PVector(0,1);
-        double angleD = Utils.findAngle(circle, D);
-        System.out.println(String.format("Degree B: %f",angleD));
-
-//        PVector E = new PVector(Utils.doubleToFloat(Math.sqrt(2) / 2),Utils.doubleToFloat(- Math.sqrt(2) / 2));
-//        double angleE = Utils.findAngle(circle, E);
-//        System.out.println(String.format("Degree E: %f",angleE));
-
-
-
-        assertEquals(1,1);
+        for(int i = 0; i < 360; i=i+1){
+            double radians = Math.toRadians(i);
+            PVector point = Utils.pointOnCircle(circle,radians);
+            double degrees = Utils.angleForPointOnCircleInDegrees(circle,point);
+            assertEquals(i,degrees,0.01);
+        }
 
     }
+
 
 
 
