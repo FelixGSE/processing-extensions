@@ -16,6 +16,13 @@ public class Triangle {
         this.C = C;
     }
 
+    // FIXME: Some hack
+    public Triangle() {
+        this.A = new PVector(0,0);
+        this.B = new PVector(0,0);
+        this.C = new PVector(0,0);
+    }
+
     ;
 
     public Triangle getScaled(float factor) {
@@ -294,6 +301,41 @@ public class Triangle {
 
     ;
 
+    public PVector computeRandomPointOnSide(String side) {
+
+        if (side.equals("a")) {
+            return segmentA().getRandomPointOn();
+        } else if (side.equals("b")) {
+            return segmentB().getRandomPointOn();
+        } else if (side.equals("c")) {
+            return segmentC().getRandomPointOn();
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+
+    }
+
+    ;
+
+    public Line getSegment(String side) {
+
+        if (side.equals("a")) {
+            return segmentA();
+        } else if (side.equals("b")) {
+            return segmentB();
+        } else if (side.equals("c")) {
+            return segmentC();
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+
+    }
+
+    ;
+
+
     public PVector computeRandomPointIn() {
 
         return Utils.randomPointInTriangle(this);
@@ -409,5 +451,49 @@ public class Triangle {
     }
 
     ;
+
+    public void drawTriangleSubdivisionFill(PApplet sketch, int depth){
+
+        arcTriangleSubdivision(sketch, this, depth);
+
+    };
+
+    private void arcTriangleSubdivision(PApplet sketch, Triangle triangle, int depth){
+
+        if (depth >= 0) {
+
+            String side = Utils.getRandomTriangleSide();
+            PVector pointOnSide = triangle.getSegment(side).getMidPoint();
+
+            // FIXME: This needs to be done to resolve canot resolve symbol error
+            Triangle left = new Triangle();
+            Triangle right = new Triangle();
+            sketch.stroke(sketch.random(255), sketch.random(255), sketch.random(255));
+            if(side.equals("a")){
+
+                new Line(triangle.A,pointOnSide).drawWithEndpoints(sketch,5);
+                left = new Triangle(triangle.A,pointOnSide,triangle.C);
+                right = new Triangle(triangle.A,triangle.B,pointOnSide);
+            } else if (side.equals("b")){
+                new Line(triangle.B,pointOnSide).drawWithEndpoints(sketch,5);
+                left = new Triangle(triangle.A, triangle.B, pointOnSide);
+                right = new Triangle(pointOnSide, triangle.B, triangle.C);
+            } else if (side.equals("c")){
+                new Line(triangle.C,pointOnSide).drawWithEndpoints(sketch,5);
+                left = new Triangle(pointOnSide, triangle.B, triangle.C);
+                right = new Triangle(triangle.A, pointOnSide, triangle.C);
+            } else {
+                throw new IllegalArgumentException();
+            }
+
+            System.out.println(String.format("Left - Depth: %d",depth-1));
+            arcTriangleSubdivision(sketch, left ,depth-1);
+
+            System.out.println(String.format("Right - Depth: %d",depth-1));
+            arcTriangleSubdivision(sketch, right ,depth-1);
+
+        }
+
+    };
 
 }

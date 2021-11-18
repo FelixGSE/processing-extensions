@@ -458,6 +458,14 @@ public class Utils {
 
     ;
 
+    public static String getRandomTriangleSide(){
+        String[] sides = {"a", "b", "c"};
+        return Utils.getRandom(sides);
+
+    }
+
+    ;
+
     public static PVector getCircularJitteredPoint(PVector point, float radius) {
         return new Circle(point, radius).computeRandomPointIn();
 

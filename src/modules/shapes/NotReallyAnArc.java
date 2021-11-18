@@ -48,5 +48,24 @@ public class NotReallyAnArc {
                 refCircle.center.y, refCircle.radius * 2, refCircle.radius * 2, refCircleAngleStart, refCircleAngleEnd);
     };
 
+    public void drawTriangleSubdivisionFill(PApplet sketch, int depth){
+
+        arcTriangleSubdivision(sketch, this, depth);
+
+    }
+
+    private void arcTriangleSubdivision(PApplet sketch, NotReallyAnArc arc, int depth){
+
+        if(depth >= 0){
+
+
+
+
+
+        }
+
+
+    }
+
 
 }
