@@ -3,7 +3,7 @@ package modules.shapes;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class Triangle {
+public class Triangle implements Shape {
 
     public PVector A;
     public PVector B;
@@ -24,6 +24,18 @@ public class Triangle {
     }
 
     ;
+
+    public PVector getA(){
+        return A.copy();
+    };
+
+    public PVector getB(){
+        return B.copy();
+    };
+
+    public PVector getC(){
+        return C.copy();
+    };
 
     public Triangle getScaled(float factor) {
 
@@ -121,6 +133,58 @@ public class Triangle {
 
         return Utils.floatToDouble(A.dist(this.B));
 
+    }
+
+    ;
+
+    public String getShortestSide() {
+
+        float[] segmentLengths = new float[]{Utils.doubleToFloat(a()), Utils.doubleToFloat(b()), Utils.doubleToFloat(c())};
+
+
+        int index = 0;
+        float min = segmentLengths[index];
+
+        for (int i = 1; i < segmentLengths.length; i++) {
+            if (segmentLengths[i] <= min) {
+                min = segmentLengths[i];
+                index = i;
+            }
+        }
+        if (index == 0) {
+            return "a";
+        } else if (index == 1) {
+            return "b";
+        } else {
+            return "c";
+        }
+
+
+    }
+
+    ;
+
+    public String getLongestSide() {
+
+        float[] segmentLengths = new float[]{Utils.doubleToFloat(a()), Utils.doubleToFloat(b()), Utils.doubleToFloat(c())};
+
+
+        int index = 0;
+        float max = segmentLengths[index];
+
+        for (int i = 1; i < segmentLengths.length; i++) {
+            if (segmentLengths[i] >= max) {
+                max = segmentLengths[i];
+                index = i;
+            }
+        }
+        if (index == 0) {
+            return "a";
+        } else if (index == 1) {
+            return "b";
+        } else {
+            return "c";
+        }
     }
 
     ;
@@ -279,6 +343,19 @@ public class Triangle {
         return Utils.scaleLineFromOrigin(line,ratio);
     };
 
+    public PVector computeRandomGaussianPointOnSide(String side, float sigma) {
+
+        if (side.equals("a")) {
+            return segmentA().computeRandomGaussianPointOnLine(sigma);
+        } else if (side.equals("b")) {
+            return segmentB().computeRandomGaussianPointOnLine(sigma);
+        } else if (side.equals("c")) {
+            return segmentC().computeRandomGaussianPointOnLine(sigma);
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+    };
 
     public PVector computeRandomPointOn() {
 
@@ -462,24 +539,25 @@ public class Triangle {
 
         if (depth >= 0) {
 
-            String side = Utils.getRandomTriangleSide();
-            PVector pointOnSide = triangle.getSegment(side).getMidPoint();
+//            String side = Utils.getRandomTriangleSide();
+            String side = triangle.getLongestSide();
+            PVector pointOnSide = triangle.getSegment(side).computeRandomGaussianPointOnLine(1);
 
             // FIXME: This needs to be done to resolve canot resolve symbol error
             Triangle left = new Triangle();
             Triangle right = new Triangle();
-            sketch.stroke(sketch.random(255), sketch.random(255), sketch.random(255));
+//            sketch.stroke(sketch.random(255), sketch.random(255), sketch.random(255));
             if(side.equals("a")){
 
-                new Line(triangle.A,pointOnSide).drawWithEndpoints(sketch,5);
+                new Line(triangle.A,pointOnSide).draw(sketch);
                 left = new Triangle(triangle.A,pointOnSide,triangle.C);
                 right = new Triangle(triangle.A,triangle.B,pointOnSide);
             } else if (side.equals("b")){
-                new Line(triangle.B,pointOnSide).drawWithEndpoints(sketch,5);
+                new Line(triangle.B,pointOnSide).draw(sketch);
                 left = new Triangle(triangle.A, triangle.B, pointOnSide);
                 right = new Triangle(pointOnSide, triangle.B, triangle.C);
             } else if (side.equals("c")){
-                new Line(triangle.C,pointOnSide).drawWithEndpoints(sketch,5);
+                new Line(triangle.C,pointOnSide).draw(sketch);
                 left = new Triangle(pointOnSide, triangle.B, triangle.C);
                 right = new Triangle(triangle.A, pointOnSide, triangle.C);
             } else {

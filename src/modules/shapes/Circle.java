@@ -90,6 +90,12 @@ public class Circle {
 
     ;
 
+    public PVector computeRandomGaussianPointOnBetweenAngles(float start,float stop, float sigma){
+
+        return Utils.randomGaussianPointOnCircleBetweenAngles(this,start,stop,sigma);
+
+    };
+
     public PVector computeRandomPointOnBetweenAngles(float start,float stop) {
         return Utils.randomPointOnCircleBetweenAngles(this,start,stop);
     }
@@ -132,6 +138,17 @@ public class Circle {
     }
 
     ;
+
+    public void drawEqualArcTriangleSubdivide(PApplet sketch, int n, int depth, float sigma) {
+
+        ArrayList<NotReallyAnArc> arcList = equalArcSubdivide(n);
+        for (int i = 0; i < arcList.size(); i++) {
+
+            arcList.get(i).drawTriangleSubdivisionFill(sketch,depth, sigma);
+
+        }
+
+    };
 
 
     public void draw(PApplet sketch) {

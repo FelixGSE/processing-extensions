@@ -82,6 +82,11 @@ public class Line {
 
     ;
 
+    public PVector computeRandomGaussianPointOnLine(double sigma){
+        return Utils.randomGaussianPointOnLine(this,sigma);
+    }
+    ;
+
     public PVector getRandomPointOn() {
         return Utils.randomPointOnLine(this);
     }
@@ -122,6 +127,25 @@ public class Line {
 
     private void privateDrawMidPoint(PApplet sketch, float size) {
         Utils.drawPoint(sketch, getMidPoint(), size);
+    }
+
+    ;
+
+    public void drawRandomGaussianPointOnLine(PApplet sketch, float sigma) {
+        privateDrawRandomGaussianPointOnLine(sketch, sigma, 5);
+    }
+
+    ;
+
+    public void drawRandomGaussianPointOnLine(PApplet sketch, float sigma, float size) {
+        privateDrawRandomGaussianPointOnLine(sketch, sigma, size);
+    }
+
+    ;
+
+    private void privateDrawRandomGaussianPointOnLine(PApplet sketch, float sigma, float size) {
+        PVector point = computeRandomGaussianPointOnLine(Utils.floatToDouble(sigma) );
+        sketch.circle(point.x, point.y, size);
     }
 
     ;

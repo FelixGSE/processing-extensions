@@ -2,7 +2,7 @@ package modules.shapes;
 
 import processing.core.PApplet;
 import processing.core.PVector;
-
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -87,6 +87,15 @@ public class Utils {
     public static PVector randomPointOnCircleBetweenAngles(Circle circle, float start, float stop) {
 
         PVector degrees = Utils.makePositiveRealLine(start, stop).getRandomPointIn();
+
+        return pointOnCircle(circle, Utils.degreeToRadians(Utils.floatToDouble(degrees.x)));
+    }
+
+    ;
+
+    public static PVector randomGaussianPointOnCircleBetweenAngles(Circle circle, float start, float stop, float sigma) {
+
+        PVector degrees = Utils.makePositiveRealLine(start, stop).computeRandomGaussianPointOnLine(sigma);
 
         return pointOnCircle(circle, Utils.degreeToRadians(Utils.floatToDouble(degrees.x)));
     }
@@ -283,6 +292,35 @@ public class Utils {
     public static PVector randomPointOnLine(Line line) {
         return scaleLineFromOrigin(line, Math.random());
 
+    }
+
+    ;
+
+    public static double randomNormal(double mean, double std){
+        Random random = new Random();
+        return  random.nextGaussian() * std + mean;
+
+    };
+
+    public static PVector randomGaussianPointOnLine(Line line,double sigma) {
+        double MU = 0.0;
+        int sigmaBoundFactor = 4;
+//        double IM = 0.5;
+        double X = Utils.randomNormal(MU,sigma);
+//        double Z = (X - MU) / sigma;
+        double leftClip = MU - sigmaBoundFactor * sigma;
+        double rightClip = MU + sigmaBoundFactor * sigma;
+        double scalingFactor = 0;
+        if(X < leftClip) {
+            scalingFactor = 0.0;
+        } else if (X > rightClip) {
+            scalingFactor = 1.0;
+        } else {
+            double len = Math.abs(leftClip-rightClip);
+            scalingFactor = (X + len/2) / (len);
+        }
+
+        return Utils.scaleLineFromOrigin(line, scalingFactor);
     }
 
     ;
