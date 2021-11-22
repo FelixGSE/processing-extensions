@@ -17,6 +17,11 @@ public class Line {
 
     ;
 
+    public String toString() {
+        return String.format("Line(A=(%f,%f),B=(%f,%f))", start.x,start.y, end.x,end.y);
+    }
+    ;
+
     public Line getShifted(PVector mover) {
         PVector newStart = start.copy().add(mover);
         PVector newEnd = end.copy().add(mover);
