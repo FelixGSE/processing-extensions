@@ -180,26 +180,12 @@ public class Quadrilateral {
 
 
     private void drawQuadSubdivisionSplit(PApplet sketch, Quadrilateral quad, int depth){
-//        if(Math.random() < 0.01){
-//            return ;
-//        }
+        if(Math.random() < 0.01){
+            return ;
+        }
         if (depth >= 0) {
             String side;
-//            if(depth == 0){
-//                sketch.stroke(255,0,0);
-//                side = "a";
-//            } else if(depth == 1){
-//                sketch.stroke(0,255,0);
-//                side = "a";
-//            } else if(depth == 2) {
-//                sketch.stroke(0, 0, 255);
-//                side = "c";
-//            } else {
-//                sketch.stroke(0, 0, 0);
-//                side = Utils.getRandomTriangleSide();
-//            }
 
-//            String side = Utils.getRandomTriangleSide();
             side = quad.getLongestSide();
             PVector pointOnSide = quad.getSegment(side).computeRandomGaussianPointOnLine(1);
             String oppositeSide = quad.getOppositeSide(side);
@@ -209,49 +195,33 @@ public class Quadrilateral {
             Quadrilateral right;
 
             if(side.equals("a")){
-                System.out.println("START");
-                System.out.println(String.format("SPLIT %s","a"));
-                System.out.println(String.format("DEPTH %d",depth-1));
-                System.out.println(String.format("PARENT %s",quad.toString()));
-                System.out.println(String.format("SPLIT LINE %s",new Line(pointOnSide,pointOnOppositeSite).toString()));
+
                 new Line(pointOnSide,pointOnOppositeSite).draw(sketch);
                 left = new Quadrilateral(pointOnSide,quad.getB(),quad.getC(),pointOnOppositeSite);
                 right = new Quadrilateral(quad.getA(),pointOnSide,pointOnOppositeSite,quad.getD());
             } else if (side.equals("b")){
-                System.out.println("START");
-                System.out.println(String.format("SPLIT %s","b"));
-                System.out.println(String.format("DEPTH %d",depth-1));
-                System.out.println(String.format("PARENT %s",quad.toString()));
-                System.out.println(String.format("SPLIT LINE %s",new Line(pointOnSide,pointOnOppositeSite).toString()));
+
                 new Line(pointOnSide,pointOnOppositeSite).draw(sketch);
                 left = new Quadrilateral(pointOnOppositeSite,pointOnSide,quad.getC(),quad.getD());
                 right = new Quadrilateral(quad.getA(),quad.getB(),pointOnSide,pointOnOppositeSite);
             } else if (side.equals("c")){
-                System.out.println("START");
-                System.out.println(String.format("SPLIT %s","c"));
-                System.out.println(String.format("DEPTH %d",depth-1));
-                System.out.println(String.format("PARENT %s",quad.toString()));
-                System.out.println(String.format("SPLIT LINE %s",new Line(pointOnSide,pointOnOppositeSite).toString()));
+
                 new Line(pointOnSide,pointOnOppositeSite).draw(sketch);
                 left = new Quadrilateral(quad.getA(),pointOnOppositeSite,pointOnSide,quad.getD());
                 right = new Quadrilateral(pointOnOppositeSite,quad.getB(),quad.getC(),pointOnSide);
             } else {
-                System.out.println("START");
-                System.out.println(String.format("SPLIT %s","d"));
-                System.out.println(String.format("DEPTH %d",depth-1));
-                System.out.println(String.format("PARENT %s",quad.toString()));
-                System.out.println(String.format("SPLIT LINE %s",new Line(pointOnSide,pointOnOppositeSite).toString()));
+
                 new Line(pointOnSide,pointOnOppositeSite).draw(sketch);
                 left = new Quadrilateral(quad.getA(),quad.getB(),pointOnOppositeSite,pointOnSide);
                 right = new Quadrilateral(pointOnSide,pointOnOppositeSite,quad.getC(),quad.getD());
             }
 
-            System.out.println(String.format("Left - Depth: %d | %s",depth-1, left.toString()));
+
             drawQuadSubdivisionSplit(sketch, left ,depth-1);
 
-            System.out.println(String.format("right - Depth: %d | %s",depth-1, left.toString()));
+
             drawQuadSubdivisionSplit(sketch, right ,depth-1);
-            System.out.println("DONE");
+
 
         }
 
