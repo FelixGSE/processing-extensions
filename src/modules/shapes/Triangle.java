@@ -357,6 +357,23 @@ public class Triangle implements Shape {
 
     };
 
+    public PVector computeMidPointOnSide(String side) {
+
+        if (side.equals("a")) {
+            return segmentA().getMidPoint();
+        } else if (side.equals("b")) {
+            return segmentB().getMidPoint();
+        } else if (side.equals("c")) {
+            return segmentC().getMidPoint();
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+
+    }
+
+    ;
+
     public PVector computeRandomPointOn() {
 
         String[] sides = {"a", "b", "c"};

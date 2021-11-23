@@ -16,8 +16,10 @@ interface Shape {
       public PVector getC();
       public PVector computeRandomPointOnSide(String side);
       public PVector computeRandomGaussianPointOnSide(String side,float sigma);
+      public PVector computeMidPointOnSide(String side);
       public String getShortestSide();
       public String getLongestSide();
+
 //
 //
 //    public ArrayList<PVector> vertexList;

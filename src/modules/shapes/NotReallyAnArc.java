@@ -26,7 +26,7 @@ public class NotReallyAnArc implements Shape {
     ;
 
     public double a() {
-        return refCircleAngleEnd - refCircleAngleStart * refCircle.radius;
+        return (refCircleAngleEnd - refCircleAngleStart) * refCircle.radius;
     }
 
     ;
@@ -141,6 +141,23 @@ public class NotReallyAnArc implements Shape {
 
     ;
 
+    public PVector computeMidPointOnSide(String side) {
+
+        if (side.equals("a")) {
+            return refCircle.getPointOnCircleForAngle(refCircleAngleEnd-refCircleAngleStart);
+        } else if (side.equals("b")) {
+            return segmentB().getMidPoint();
+        } else if (side.equals("c")) {
+            return segmentC().getMidPoint();
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+
+    }
+
+    ;
+
     public PVector computeRandomGaussianPointOnSide(String side, float sigma) {
 
         if (side.equals("a")) {
@@ -194,42 +211,42 @@ public class NotReallyAnArc implements Shape {
         if (depth >= 0) {
 
             if (depth == 0) {
-                side = "b";
+                side = "a";
             } else if (depth == 1) {
+                side = "b";
+            } else if (depth == 2) {
                 side = "a";
             } else {
                 side = Utils.getRandomTriangleSide();
             };
 
-//            String side = Utils.getRandomTriangleSide();
-//            String side = "b";
+             side = Utils.getRandomTriangleSide();
+//            side = "c";
             Random r = new Random();
             r.setSeed(1);
-            PVector pointOnSide = shape.computeRandomGaussianPointOnSide(side, sigma);
+            PVector pointOnSide = shape.computeMidPointOnSide(side);
             // FIXME: This needs to be done to resolve canot resolve symbol error
             Shape left;
             Shape right;
 
-            System.out.println(String.format("Point X : %f", pointOnSide.x));
-            System.out.println(String.format("Point X : %f", pointOnSide.y));
             sketch.stroke(sketch.random(255), sketch.random(255), sketch.random(255));
             if (side.equals("a")) {
                 sketch.stroke(255, 0, 0);
-                new Line(shape.getA().copy(), pointOnSide).drawWithEndpoints(sketch, 5);
-                left = new NotReallyAnArc(shape.getA(), pointOnSide, shape.getC(), refCircle);
-                right = new NotReallyAnArc(shape.getA(), shape.getB(), pointOnSide, refCircle);
+                new Line(shape.getA(), pointOnSide).drawWithEndpoints(sketch, 5);
+                left = new NotReallyAnArc(shape.getA(), shape.getB(), pointOnSide, refCircle);
+                right = new NotReallyAnArc(shape.getA(), pointOnSide, shape.getC(), refCircle);
 
             } else if (side.equals("b")) {
                 sketch.stroke(0, 255, 0);
                 new Line(shape.getB(), pointOnSide).drawWithEndpoints(sketch, 5);
-                left = new NotReallyAnArc(shape.getA(), shape.getB(), pointOnSide, refCircle);
-                right = new Triangle(pointOnSide, shape.getB(), shape.getC());
+                left = new NotReallyAnArc(pointOnSide, shape.getB(), shape.getC(), refCircle);
+                right = new Triangle(shape.getA(), shape.getB(), pointOnSide);
 
             } else if (side.equals("c")) {
                 sketch.stroke(0, 0, 255);
                 new Line(shape.getC(), pointOnSide).drawWithEndpoints(sketch, 5);
-                left = new Triangle(pointOnSide, shape.getB(), shape.getC());
-                right = new NotReallyAnArc(shape.getA(), pointOnSide, shape.getC(), refCircle);
+                left = new Triangle(shape.getA(), pointOnSide, shape.getC());
+                right = new NotReallyAnArc(pointOnSide, shape.getB(), shape.getC(), refCircle);
 
             } else {
                 throw new IllegalArgumentException();
