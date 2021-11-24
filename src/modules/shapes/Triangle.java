@@ -25,6 +25,11 @@ public class Triangle implements Shape {
 
     ;
 
+    public String toString(){
+        return String.format("Triangle(A=(%f,%f),B=(%f,%f),C=(%f,%f))",A.x,A.y,B.x,B.y,C.x,C.y);
+    }
+    ;
+
     public PVector getA(){
         return A.copy();
     };
@@ -567,6 +572,7 @@ public class Triangle implements Shape {
             if(side.equals("a")){
 
                 new Line(triangle.A,pointOnSide).draw(sketch);
+
                 left = new Triangle(triangle.A,pointOnSide,triangle.C);
                 right = new Triangle(triangle.A,triangle.B,pointOnSide);
             } else if (side.equals("b")){
@@ -581,10 +587,10 @@ public class Triangle implements Shape {
                 throw new IllegalArgumentException();
             }
 
-            System.out.println(String.format("Left - Depth: %d",depth-1));
+            System.out.println(String.format("Left - Depth: %d",depth));
             arcTriangleSubdivision(sketch, left ,depth-1);
 
-            System.out.println(String.format("Right - Depth: %d",depth-1));
+            System.out.println(String.format("Right - Depth: %d",depth));
             arcTriangleSubdivision(sketch, right ,depth-1);
 
         }

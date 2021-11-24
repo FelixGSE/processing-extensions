@@ -25,6 +25,11 @@ public class Line {
 
     ;
 
+    public String toString(){
+        return String.format("Line(start=(%f,%f),end=(%f,%f))",start.x,start.y,end.x,end.y);
+    }
+    ;
+
     public void shiftMe(PVector mover) {
         this.start.add(mover);
         this.end.add(mover);
