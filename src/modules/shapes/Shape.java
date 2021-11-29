@@ -5,7 +5,7 @@ import processing.core.PApplet;
 
 import java.util.ArrayList;
 
-interface Shape {
+public interface Shape {
 
       public void draw(PApplet sketch);
       public double a();

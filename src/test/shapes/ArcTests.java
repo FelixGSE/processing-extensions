@@ -12,17 +12,20 @@ public class ArcTests {
 
     @Test
     public void testGCircle() {
+
         PVector center = new PVector(0,1);
         float radius = 1;
         Circle circle = new Circle(center,radius);
         PVector A = new PVector(0,0);
         PVector B = new PVector(1,0);
         PVector C = new PVector(0,1);
+
         NotReallyAnArc arc = new NotReallyAnArc(A,B,C,circle);
         PVector a = new PVector(100,100);
         PVector b = new PVector(600,100);
         PVector c = new PVector(300,600);
         Triangle triangle = new Triangle(a,b,c);
+
 
         System.out.println(arc.toString());
         System.out.println(String.format("Start Angle: %f",arc.refCircleAngleStart));
@@ -93,9 +96,5 @@ public class ArcTests {
         assertEquals(500.0,midC.x,0.01);
         assertEquals(650.0,midC.y,0.01);
 
-
-
-
     }
-
 }

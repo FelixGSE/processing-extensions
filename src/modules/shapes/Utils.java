@@ -158,6 +158,16 @@ public class Utils {
 
     ;
 
+    public static Line symetricOrthogonalLine(Line line, PVector point ,float distance) {
+
+        li
+
+        return new PVector(x, y);
+
+    }
+
+    ;
+
     public static PVector lineMidPoint(Line line) {
         float x = doubleToFloat(0.5 * line.start.x + 0.5 * line.end.x);
         float y = doubleToFloat(0.5 * line.start.y + 0.5 * line.end.y);

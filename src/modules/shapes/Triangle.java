@@ -558,7 +558,9 @@ public class Triangle implements Shape {
     };
 
     private void arcTriangleSubdivision(PApplet sketch, Triangle triangle, int depth){
-
+        if(Math.random() < 0.01){
+            return ;
+        }
         if (depth >= 0) {
 
 //            String side = Utils.getRandomTriangleSide();

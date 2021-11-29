@@ -3,6 +3,7 @@ package modules.shapes;
 import processing.core.PApplet;
 import processing.core.PVector;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class NotReallyAnArc implements Shape {
@@ -20,21 +21,32 @@ public class NotReallyAnArc implements Shape {
         this.C = C;
         this.refCircle = refCircle;
         this.refCircleAngleStart = Utils.angleForPointOnCircleInDegrees(refCircle, B);
-
         this.refCircleAngleEnd = Utils.angleForPointOnCircleInDegrees(refCircle, C);
-        if(refCircleAngleEnd == 0 && refCircleAngleStart<360){
+
+        if (refCircleAngleEnd == 0 && refCircleAngleStart < 360) {
             this.refCircleAngleEnd = 360;
         }
+    }
 
-//        if(refCircleAngleStart> refCircleAngleEnd){
-//            throw new IllegalArgumentException("refCircleAngleEnd is larger than refCircleAngleStart");
-//        }
+    public NotReallyAnArc(PVector A, PVector B, PVector C) {
+        this.A = A;
+        this.B = B;
+        this.C = C;
+    }
+
+    public NotReallyAnArc() {
+        this.A = new PVector(0, 0);
+        this.B = new PVector(0, 0);
+        this.C = new PVector(0, 0);
     }
 
     ;
-    public String toString(){
-        return String.format("NotReallyAnArc(A=(%f,%f),B=(%f,%f),C=(%f,%f),start=%f,stop=%f)",A.x,A.y,B.x,B.y,C.x,C.y,this.refCircleAngleStart,this.refCircleAngleEnd);
-    };
+
+    public String toString() {
+        return String.format("NotReallyAnArc(A=(%f,%f),B=(%f,%f),C=(%f,%f),start=%f,stop=%f)", A.x, A.y, B.x, B.y, C.x, C.y, this.refCircleAngleStart, this.refCircleAngleEnd);
+    }
+
+    ;
 
     public double a() {
         return (Math.toRadians(refCircleAngleEnd) - Math.toRadians(refCircleAngleStart)) * refCircle.radius;
@@ -58,8 +70,8 @@ public class NotReallyAnArc implements Shape {
 
         float[] segmentLengths = new float[]{Utils.doubleToFloat(a()), Utils.doubleToFloat(b()), Utils.doubleToFloat(c())};
 
-
         int index = 0;
+
         float min = segmentLengths[index];
 
         for (int i = 1; i < segmentLengths.length; i++) {
@@ -68,6 +80,7 @@ public class NotReallyAnArc implements Shape {
                 index = i;
             }
         }
+
         if (index == 0) {
             return "a";
         } else if (index == 1) {
@@ -75,7 +88,6 @@ public class NotReallyAnArc implements Shape {
         } else {
             return "c";
         }
-
 
     }
 
@@ -86,6 +98,7 @@ public class NotReallyAnArc implements Shape {
         float[] segmentLengths = new float[]{Utils.doubleToFloat(a()), Utils.doubleToFloat(b()), Utils.doubleToFloat(c())};
 
         int index = 0;
+
         float max = segmentLengths[index];
 
         for (int i = 1; i < segmentLengths.length; i++) {
@@ -94,6 +107,7 @@ public class NotReallyAnArc implements Shape {
                 index = i;
             }
         }
+
         if (index == 0) {
             return "a";
         } else if (index == 1) {
@@ -101,6 +115,7 @@ public class NotReallyAnArc implements Shape {
         } else {
             return "c";
         }
+
     }
 
     ;
@@ -155,7 +170,7 @@ public class NotReallyAnArc implements Shape {
 
         if (side.equals("a")) {
 
-            return refCircle.getPointOnCircleForAngle((refCircleAngleEnd+refCircleAngleStart)/2 );
+            return refCircle.getPointOnCircleForAngle((refCircleAngleEnd + refCircleAngleStart) / 2);
         } else if (side.equals("b")) {
             return segmentB().getMidPoint();
         } else if (side.equals("c")) {
@@ -185,6 +200,9 @@ public class NotReallyAnArc implements Shape {
 
     ;
 
+    public Line segmentA() {
+        return new Line(B, C);
+    }
 
     public Line segmentC() {
         return new Line(A, B);
@@ -220,36 +238,19 @@ public class NotReallyAnArc implements Shape {
 
     ;
 
+
     private void arcTriangleSubdivision(PApplet sketch, Shape shape, int depth, float sigma) {
-//        String side;
+        String side;
 
         if (depth >= 0) {
 
-//            if (depth == 0) {
-//                side = "a";
-//            } else if (depth == 1) {
-//                side = "b";
-//            } else if (depth == 2) {
-//                side = "c";
-//            } else {
-//                side = Utils.getRandomTriangleSide();
-//            };
-
-//             side = Utils.getRandomTriangleSide();
-//            side = "a";
-//            Random r = new Random();
-//            r.setSeed(1);
-            String side = shape.getLongestSide();
-            PVector pointOnSide = shape.computeRandomGaussianPointOnSide(side,1);
+            side = shape.getLongestSide();
+            PVector pointOnSide = shape.computeRandomGaussianPointOnSide(side, 1);
             // FIXME: This needs to be done to resolve canot resolve symbol error
             Shape left = null;
             Shape right = null;
-//            System.out.println("START");
-//            System.out.printf("Depth: %d%n", depth);
-//            System.out.println(shape.toString());
-////            sketch.stroke(sketch.random(255), sketch.random(255), sketch.random(255));
 
-            if(shape instanceof Triangle) {
+            if (shape instanceof Triangle) {
 
                 if (side.equals("a")) {
                     new Line(shape.getA(), pointOnSide).draw(sketch);
@@ -264,45 +265,36 @@ public class NotReallyAnArc implements Shape {
                     left = new Triangle(pointOnSide, shape.getB(), shape.getC());
                     right = new Triangle(shape.getA(), pointOnSide, shape.getC());
                 }
-            } else if(shape instanceof NotReallyAnArc) {
+            } else if (shape instanceof NotReallyAnArc) {
 
-                    if (side.equals("a")) {
-//                        sketch.stroke(255, 0, 0);
-//                        System.out.println("START");
-                        new Line(shape.getA(), pointOnSide).toString();
-                        new Line(shape.getA(), pointOnSide).draw(sketch);
-                        left = new NotReallyAnArc(shape.getA(), pointOnSide, shape.getC(), refCircle);
-                        right = new NotReallyAnArc(shape.getA(), shape.getB(), pointOnSide, refCircle);
+                if (side.equals("a")) {
+                    new Line(shape.getA(), pointOnSide).draw(sketch);
+                    left = new NotReallyAnArc(shape.getA(), pointOnSide, shape.getC(), refCircle);
+                    right = new NotReallyAnArc(shape.getA(), shape.getB(), pointOnSide, refCircle);
 
-                    } else if (side.equals("b")) {
-//                        sketch.stroke(0, 255, 0);
-                        new Line(shape.getB(), pointOnSide).draw(sketch);
-                        left = new Triangle(shape.getA(), shape.getB(), pointOnSide);
-                        right = new NotReallyAnArc(pointOnSide, shape.getB(), shape.getC(), refCircle);
+                } else if (side.equals("b")) {
+                    new Line(shape.getB(), pointOnSide).draw(sketch);
+                    left = new Triangle(shape.getA(), shape.getB(), pointOnSide);
+                    right = new NotReallyAnArc(pointOnSide, shape.getB(), shape.getC(), refCircle);
 
-                    } else if (side.equals("c")) {
-//                        sketch.stroke(0, 0, 255);
-                        new Line(shape.getC(), pointOnSide).draw(sketch);
-                        left = new NotReallyAnArc(pointOnSide, shape.getB(), shape.getC(), refCircle);
-                        right = new Triangle(shape.getA(), pointOnSide, shape.getC());
+                } else if (side.equals("c")) {
+                    new Line(shape.getC(), pointOnSide).draw(sketch);
+                    left = new NotReallyAnArc(pointOnSide, shape.getB(), shape.getC(), refCircle);
+                    right = new Triangle(shape.getA(), pointOnSide, shape.getC());
 
-                    } else {
-                        throw new IllegalArgumentException();
-                    }
+                } else {
+                    throw new IllegalArgumentException();
+                }
             }
 
-//            System.out.printf("Left - Depth: %d%n", depth);
             arcTriangleSubdivision(sketch, left, depth - 1, sigma);
-
-//            System.out.printf("Right - Depth: %d%n", depth);
             arcTriangleSubdivision(sketch, right, depth - 1, sigma);
-//            System.out.println("DONE");
+
 
         }
 
+        ;
+
+
     }
-
-    ;
-
 }
-

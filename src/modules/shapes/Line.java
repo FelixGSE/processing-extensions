@@ -17,17 +17,17 @@ public class Line {
 
     ;
 
+    public String toString() {
+        return String.format("Line(A=(%f,%f),B=(%f,%f))", start.x,start.y, end.x,end.y);
+    }
+    ;
+
     public Line getShifted(PVector mover) {
         PVector newStart = start.copy().add(mover);
         PVector newEnd = end.copy().add(mover);
         return new Line(newStart, newEnd);
     }
 
-    ;
-
-    public String toString(){
-        return String.format("Line(start=(%f,%f),end=(%f,%f))",start.x,start.y,end.x,end.y);
-    }
     ;
 
     public void shiftMe(PVector mover) {
@@ -51,11 +51,19 @@ public class Line {
 
     ;
 
+    public PVector getStart(){
+        return start.copy();
+    }
+
+    public PVector getEnd(){
+        return start.copy();
+    }
+
     public Line getRotated(float degrees) {
 
-        PVector endRotated = new Circle(start,length()).getPointOnCircleForAngle(degrees);
+        PVector endRotated = new Circle(getStart(),length()).getPointOnCircleForAngle(degrees);
 
-        return new Line(start,endRotated);
+        return new Line(getStart(),endRotated);
     }
 
     ;
