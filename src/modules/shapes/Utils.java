@@ -158,11 +158,8 @@ public class Utils {
 
     ;
 
-    public static Line symetricOrthogonalLine(Line line, PVector point ,float distance) {
+    public static void symetricOrthogonalLine(Line line, PVector point ,float distance) {
 
-        li
-
-        return new PVector(x, y);
 
     }
 
