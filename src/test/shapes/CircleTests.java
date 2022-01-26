@@ -1,10 +1,13 @@
 package test.shapes;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+
 import modules.shapes.*;
+import org.junit.Test;
 import processing.core.PVector;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class CircleTests {
@@ -12,7 +15,7 @@ public class CircleTests {
     public void testGCircle() {
 
         // Given
-        PVector center = new PVector(0,0);
+        PVector center = new PVector(0, 0);
         float radius = 1;
 
         Circle circle = new Circle(center, radius);
@@ -29,16 +32,16 @@ public class CircleTests {
         // When
 
         // Then
-        
-        assertEquals(approximateCircleArea, area,0.0000000001);
+
+        assertEquals(approximateCircleArea, area, 0.0000000001);
     }
 
     @Test
     public void testEqualArcSubdivide() {
 
-        PVector center = new PVector(0,0);
+        PVector center = new PVector(0, 0);
         float radius = 1;
-        Circle circle = new Circle(center,radius);
+        Circle circle = new Circle(center, radius);
 
         ArrayList<NotReallyAnArc> listOfArcs = circle.equalArcSubdivide(4);
 
@@ -47,28 +50,28 @@ public class CircleTests {
         ArrayList<NotReallyAnArc> arcList = new ArrayList<>();
 
         for (int i = 0; i <= degreeLine.size() - 2; i++) {
-            System.out.println(String.format("Angle lower: %f",degreeLine.get(i).x));
-            System.out.println(String.format("Angle upper: %f",degreeLine.get(i+1).x));
+            System.out.println(String.format("Angle lower: %f", degreeLine.get(i).x));
+            System.out.println(String.format("Angle upper: %f", degreeLine.get(i + 1).x));
 
             PVector A = circle.center.copy();
             double lowerAngleInRadians = Utils.degreeToRadians(degreeLine.get(i).x);
             PVector B = Utils.pointOnCircle(circle, lowerAngleInRadians);
 
-            System.out.println(String.format("B X: %f",B.x));
-            System.out.println(String.format("B Y: %f",B.y));
+            System.out.println(String.format("B X: %f", B.x));
+            System.out.println(String.format("B Y: %f", B.y));
 
 
             double upperAngleInRadians = Utils.degreeToRadians(degreeLine.get(i + 1).x);
             PVector C = Utils.pointOnCircle(circle, upperAngleInRadians);
 
-            System.out.println(String.format("C X: %f",C.x));
-            System.out.println(String.format("C Y: %f",C.y));
+            System.out.println(String.format("C X: %f", C.x));
+            System.out.println(String.format("C Y: %f", C.y));
 
             NotReallyAnArc currentArc = new NotReallyAnArc(A, B, C, circle);
             arcList.add(currentArc);
         }
 
-        assertEquals(4,listOfArcs.size());
+        assertEquals(4, listOfArcs.size());
         // 1
 //        assertEquals(1.000000,listOfArcs.get(0).B.x,0.1);
 //        assertEquals(0.000000,listOfArcs.get(0).B.y,0.1);
@@ -95,18 +98,134 @@ public class CircleTests {
     @Test
     public void testPointMapping() {
 
-        PVector center = new PVector(400,200);
-        float radius =100;
-        Circle circle = new Circle(center,radius);
+        PVector center = new PVector(400, 200);
+        float radius = 100;
+        Circle circle = new Circle(center, radius);
 
-        for(int i = 0; i < 360; i=i+1){
+        for (int i = 0; i < 360; i = i + 1) {
             double radians = Math.toRadians(i);
-            PVector point = Utils.pointOnCircle(circle,radians);
-            double degrees = Utils.angleForPointOnCircleInDegrees(circle,point);
-            assertEquals(i,degrees,0.01);
+            PVector point = Utils.pointOnCircle(circle, radians);
+            double degrees = Utils.angleForPointOnCircleInDegrees(circle, point);
+            assertEquals(i, degrees, 0.01);
         }
 
     }
+
+    @Test
+    public void shouldThrowIllegalArgumentExecptionWhenGetPolygonIsCalledWithSplitLessThanThree() {
+
+        // Given
+        PVector center = new PVector(0, 0);
+        float radius = 1;
+        Circle circle = new Circle(center, radius);
+        assertEquals(true, true);
+    }
+
+    @Test
+    public void shouldReturnPolesOfTheCircle() {
+
+        // Given
+        PVector center = new PVector(0, 0);
+        float radius = 1;
+        Circle circle = new Circle(center, radius);
+
+        List<PVector> poles = List.of(
+                new PVector(1, 0),
+                new PVector(0, 1),
+                new PVector(-1, 0),
+                new PVector(0, -1)
+
+
+        );
+
+        // when
+        ArrayList<PVector> result = circle.getPoles();
+
+        // then
+        for(int i=0; i<=3;i++){
+            PVector rounded = Utils.roundPVector(result.get(i),4);
+            assertEquals(poles.get(i),rounded );
+        }
+
+
+    }
+
+
+    @Test
+    public void shouldGetAPolygonWithSameNumberOfVerticesAsInput() {
+
+        // Given
+        PVector center = new PVector(0, 0);
+        float radius = 1;
+        Circle circle = new Circle(center, radius);
+
+        // when
+        Polygon result = circle.getRegularPolygon(4);
+
+        // then
+        assertEquals(4, result.getN());
+    }
+
+    @Test
+    public void shouldPreserveDistanceToPolygonVerticesEqualToCircleRadius() {
+        // given
+        PVector center = new PVector(0, 0);
+        float radius = 1;
+        Circle circle = new Circle(center, radius);
+
+        // when
+        Polygon result = circle.getRegularPolygon(4);
+
+        // then
+        for (PVector vertex : result.getVertices()) {
+
+            float distance = new Line(center, vertex).length();
+            assertEquals(radius, distance, 0.0001);
+
+        }
+
+    }
+
+    @Test
+    public void shouldMakeAPolygonWithVerticesOnPolsOfCircleWhenInputIsFour() {
+        // given
+        PVector center = new PVector(0, 0);
+        float radius = 1;
+        Circle circle = new Circle(center, radius);
+        ArrayList<PVector> poles = circle.getPoles();
+
+        // when
+        Polygon result = circle.getRegularPolygon(4);
+
+
+        // then
+        for (PVector vertex : result.getVertices()) {
+
+            float distance = new Line(center, vertex).length();
+            assertEquals(radius, distance, 0.0001);
+
+        }
+
+    }
+
+    @Test
+    public void shouldReturnPointEqualTo90DegreesWhenInputIs450() {
+        // given
+        PVector center = new PVector(0, 0);
+        float radius = 1;
+        Circle circle = new Circle(center, radius);
+        PVector point = Utils.roundPVector(circle.getPointOnCircleForAngle(90),4);
+
+        // when
+        PVector result = Utils.roundPVector(circle.getPointOnCircleForAngle(450),4);
+
+        //
+        assertEquals(point,result);
+
+    }
+
+
+
 
 
 

@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Line {
 
@@ -17,6 +18,7 @@ public class Line {
 
     ;
 
+    @Override
     public String toString() {
         return String.format("Line(A=(%f,%f),B=(%f,%f))", start.x,start.y, end.x,end.y);
     }
@@ -56,7 +58,7 @@ public class Line {
     }
 
     public PVector getEnd(){
-        return start.copy();
+        return end.copy();
     }
 
     public Line getRotated(float degrees) {
@@ -94,6 +96,50 @@ public class Line {
     }
 
     ;
+
+    public ArrayList<PVector> subdivide(int depth){
+
+        ArrayList<PVector> pointList = new ArrayList<>();
+        pointList.add(getStart());
+        subdivide(pointList, this, depth - 1,  1,  100 / (depth+1),  100 / (depth+1));
+        pointList.add(getEnd());
+        return pointList;
+
+    }
+
+    private void subdivide(ArrayList<PVector> pointList, Line line, int depth, float locationVariance, float lengthVariance, float angleVariance){
+        if (depth >= 0) {
+
+            PVector randomPointOnLine = line.computeRandomGaussianPointOnLine(locationVariance);
+            float length = Utils.doubleToFloat(Math.abs(Utils.randomNormal(0,lengthVariance)));
+            float angle = getStartPointRotation() + 90 + Utils.doubleToFloat(Utils.randomNormal(0,angleVariance));
+            PVector splitPoint = new Circle(randomPointOnLine, length).getPointOnCircleForAngle(angle);
+
+            Line left = new Line(line.getStart(), splitPoint.copy());
+            Line right = new Line(splitPoint.copy(), line.getEnd());
+            /* Add two new edges which are recursively subdivided */
+            subdivide(pointList, left, depth - 1, locationVariance,100/(2*depth+1),100 / (depth+1));
+            pointList.add(splitPoint.copy());
+            subdivide(pointList, right, depth - 1, locationVariance,100/(2*depth+1),100 / (depth+1));
+        }
+
+
+
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Line line = (Line) o;
+        return Objects.equals(start, line.start) && Objects.equals(end, line.end);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, end);
+    }
 
     public PVector computeRandomGaussianPointOnLine(double sigma){
         return Utils.randomGaussianPointOnLine(this,sigma);
@@ -188,7 +234,23 @@ public class Line {
         sketch.circle(point.x, point.y, size);
     }
 
+    public Line increaseByLength(float length) {
+
+        float scalingFactor = 1+length / length();
+        PVector newEnd = Utils.scaleLineFromOrigin( this, scalingFactor);
+        return new Line(getStart(),newEnd);
+
+    }
+
+    public float getStartPointRotation() {
+        return new Circle(getMidPoint(), length()).getAngleForPointOnCircle(getStart());
+    }
+
     ;
+
+    public float getEndPointRotation() {
+        return new Circle(getMidPoint(), length()).getAngleForPointOnCircle(getEnd());
+    }
 
 
 }

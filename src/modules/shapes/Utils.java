@@ -2,9 +2,10 @@ package modules.shapes;
 
 import processing.core.PApplet;
 import processing.core.PVector;
-import java.util.Random;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 
 public class Utils {
@@ -17,6 +18,25 @@ public class Utils {
     }
 
     ;
+
+    public static PVector roundPVector(PVector pVector, int digits) {
+
+        double x = Utils.round(pVector.x, digits);
+        double y = Utils.round(pVector.y, digits);
+
+        return new PVector(Utils.doubleToFloat(x), Utils.doubleToFloat(y));
+
+    }
+
+    public static ArrayList<Line> listOfPointsToListOfLines(ArrayList<PVector> listOfPoints) {
+        ArrayList<Line> listOfLines = new ArrayList<>();
+        for (int i = 0; i < listOfPoints.size() - 1; i++) {
+            PVector start = listOfPoints.get(i);
+            PVector end = listOfPoints.get(i + 1);
+            listOfLines.add(new Line(start, end));
+        }
+        return listOfLines;
+    }
 
     public static double degreeToRadians(double degree) {
         return degree * Math.PI / 180;
@@ -158,8 +178,14 @@ public class Utils {
 
     ;
 
-    public static void symetricOrthogonalLine(Line line, PVector point ,float distance) {
-
+    public static Line symmetricOrthogonalLine(Line line, PVector point, float distance) {
+        Circle circle = new Circle(line.start, line.length());
+        float degrees = angleForPointOnCircleInDegrees(circle, line.end);
+        float newDegrees = degrees + 90;
+        Circle newCircle = new Circle(point, distance);
+        PVector newStart = newCircle.getPointOnCircleForAngle(newDegrees);
+        PVector newEnd = newCircle.getOppositePointOnCircleForAngle(newDegrees);
+        return new Line(newStart, newEnd);
 
     }
 
@@ -224,8 +250,11 @@ public class Utils {
     ;
 
     public static ArrayList<PVector> divideLineIntoEqualParts(Line line, int n) {
+
         double a = 1.0 / n;
+
         ArrayList<PVector> outputs = new ArrayList<>();
+
         for (int i = n; i >= 0; i--) {
             double scalingFactor = 1 - i * a;
             PVector point = scaleLineFromOrigin(line, scalingFactor);
@@ -271,6 +300,22 @@ public class Utils {
 
     ;
 
+    public static ArrayList<PVector> lineCollectionToPointCollection(ArrayList<Line> lineArray) {
+        ArrayList<PVector> outputs = new ArrayList<>();
+        for (Line line : lineArray) {
+            PVector start = line.getStart();
+            PVector end = line.getEnd();
+            outputs.add(start);
+            outputs.add(end);
+        }
+
+        ;
+
+        return outputs;
+    }
+
+    ;
+
     public static PVector uniformRandomPointOnLine(PVector A, PVector B) {
 
         double randomSplit = Math.random();
@@ -303,28 +348,30 @@ public class Utils {
 
     ;
 
-    public static double randomNormal(double mean, double std){
+    public static double randomNormal(double mean, double std) {
         Random random = new Random();
-        return  random.nextGaussian() * std + mean;
+        return random.nextGaussian() * std + mean;
 
-    };
+    }
 
-    public static PVector randomGaussianPointOnLine(Line line,double sigma) {
+    ;
+
+    public static PVector randomGaussianPointOnLine(Line line, double sigma) {
         double MU = 0.0;
         int sigmaBoundFactor = 4;
 //        double IM = 0.5;
-        double X = Utils.randomNormal(MU,sigma);
+        double X = Utils.randomNormal(MU, sigma);
 //        double Z = (X - MU) / sigma;
         double leftClip = MU - sigmaBoundFactor * sigma;
         double rightClip = MU + sigmaBoundFactor * sigma;
         double scalingFactor = 0;
-        if(X < leftClip) {
+        if (X < leftClip) {
             scalingFactor = 0.0;
         } else if (X > rightClip) {
             scalingFactor = 1.0;
         } else {
-            double len = Math.abs(leftClip-rightClip);
-            scalingFactor = (X + len/2) / (len);
+            double len = Math.abs(leftClip - rightClip);
+            scalingFactor = (X + len / 2) / (len);
         }
 
         return Utils.scaleLineFromOrigin(line, scalingFactor);
@@ -437,6 +484,57 @@ public class Utils {
 
     ;
 
+    public static PVector scalePointFromReferencePoint(ArrayList<PVector> points, PVector referencePoint, float scalingFactor) {
+        // translate point back to origin:
+        return new PVector(0, 0);
+
+
+    }
+
+    ;
+
+    public static ArrayList<PVector> scaleObjectFromReferencePoint(ArrayList<PVector> points, PVector referencePoint, float scalingFactor) {
+        // translate point back to origin:
+        ArrayList<PVector> finalPoints = new ArrayList<PVector>();
+        return finalPoints;
+
+
+    }
+
+    ;
+
+    public static PVector rotatePointClockWiseAroundAReferencePoint(PVector referencePoint, PVector pointToRotate, float degrees) {
+        float radians = Utils.doubleToFloat(Utils.degreeToRadians(degrees));
+        float s = Utils.doubleToFloat(Math.sin(radians));
+        float c = Utils.doubleToFloat(Math.cos(radians));
+
+        // translate point back to origin:
+        float dx = pointToRotate.x - referencePoint.x;
+        float dy = pointToRotate.y - referencePoint.y;
+
+        // rotate point
+        float xnew = dx * c - dy * s + referencePoint.x;
+        float ynew = dx * s + dy * c + referencePoint.y;
+
+        return new PVector(xnew, ynew);
+    }
+
+    public static PVector rotatePointCounterClockWiseAroundAReferencePoint(PVector referencePoint, PVector pointToRotate, float degrees) {
+        float radians = Utils.doubleToFloat(Utils.degreeToRadians(degrees));
+        float s = Utils.doubleToFloat(Math.sin(radians));
+        float c = Utils.doubleToFloat(Math.cos(radians));
+
+        // translate point back to origin:
+        float dx = pointToRotate.x - referencePoint.x;
+        float dy = pointToRotate.y - referencePoint.y;
+
+        // rotate point
+        float xnew = dx * c + dy * s + referencePoint.x;
+        float ynew = -dx * s + dy * c + referencePoint.y;
+
+        return new PVector(xnew, ynew);
+    }
+
     public static PVector rotatePointOnEllipse(Ellipse ellipse, PVector point) {
         double radians = radiansToDegree(ellipse.rotation);
         float cosA = doubleToFloat(Math.cos(radians));
@@ -503,7 +601,7 @@ public class Utils {
 
     ;
 
-    public static String getRandomTriangleSide(){
+    public static String getRandomTriangleSide() {
         String[] sides = {"a", "b", "c"};
         return Utils.getRandom(sides);
 

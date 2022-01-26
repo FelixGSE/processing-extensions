@@ -78,12 +78,16 @@ public class Triangle implements Shape {
 
     ;
 
+    /**
+     * @param degrees
+     * @return
+     */
     public Triangle getRotated(float degrees) {
 
         float radians = Utils.doubleToFloat(Utils.degreeToRadians(degrees));
-        PVector newA = this.A.copy().rotate(radians);
-        PVector newB = this.B.copy().rotate(radians);
-        PVector newC = this.C.copy().rotate(radians);
+        PVector newA = Utils.rotatePointClockWiseAroundAReferencePoint(innerCircleCenter(), getA(),radians);
+        PVector newB = Utils.rotatePointClockWiseAroundAReferencePoint(innerCircleCenter(), getB(),radians);
+        PVector newC = Utils.rotatePointClockWiseAroundAReferencePoint(innerCircleCenter(), getC(),radians);
         return new Triangle(newA,newB,newC);
 
     }
@@ -145,7 +149,6 @@ public class Triangle implements Shape {
     public String getShortestSide() {
 
         float[] segmentLengths = new float[]{Utils.doubleToFloat(a()), Utils.doubleToFloat(b()), Utils.doubleToFloat(c())};
-
 
         int index = 0;
         float min = segmentLengths[index];

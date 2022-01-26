@@ -24,6 +24,7 @@ public class Quadrilateral {
         this.D = new PVector(0,0);
     };
 
+    @Override
     public String toString() {
         return String.format("Quadrilateral(A=(%f,%f),B=(%f,%f),C=(%f,%f),D(%f,%f))", A.x, A.y, B.x, B.y, C.x, C.y,D.x,D.y);
     }

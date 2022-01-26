@@ -21,6 +21,12 @@ public class Circle {
 
     ;
 
+    public Circle copy(){
+
+        return new Circle(getCenter(),radius);
+
+    }
+
     public Circle getShifted(PVector mover) {
         PVector newCenter = center.copy().add(mover);
         return new Circle(newCenter, radius);
@@ -29,6 +35,11 @@ public class Circle {
 
     ;
 
+    public PVector getCenter(){
+        return center.copy();
+
+    }
+
     public void shiftMe(PVector mover) {
         this.center.add(mover);
     }
@@ -36,14 +47,14 @@ public class Circle {
     ;
 
     public Circle getJittered(float radius) {
-        return new Circle(Utils.getCircularJitteredPoint(this.center,radius), this.radius);
+        return new Circle(Utils.getCircularJitteredPoint(this.center, radius), this.radius);
 
     }
 
     ;
 
     public void jitterMe(float radius) {
-        this.center = Utils.getCircularJitteredPoint(this.center,radius);
+        this.center = Utils.getCircularJitteredPoint(this.center, radius);
     }
 
     ;
@@ -76,6 +87,47 @@ public class Circle {
 
     ;
 
+    public ArrayList<PVector> getPoles(){
+
+        ArrayList<PVector> poles = new ArrayList<PVector>();
+
+        for(int i = 0; i <=360; i = i +90){
+            poles.add(getPointOnCircleForAngle(i));
+        }
+        return poles;
+
+    }
+
+    public void getChordQuadrilateral(){
+
+
+
+        return ;
+    }
+    ;
+
+
+    public Polygon getRegularPolygon(int numberOfVertices) {
+        if (numberOfVertices < 3) {
+            throw new IllegalArgumentException();
+        }
+
+        ArrayList<PVector> polygonVertices = new ArrayList<PVector>();
+
+        float splits = 360 / ((float) numberOfVertices - 1);
+
+        for (int i = 0; i < numberOfVertices; i++) {
+
+            PVector point = getPointOnCircleForAngle(i * splits);
+            polygonVertices.add(point);
+
+        }
+
+        return new Polygon(polygonVertices);
+
+    }
+
+
     public PVector getPointOnCircleForAngle(float degrees) {
         double radians = Utils.degreeToRadians(Utils.floatToDouble(degrees));
         return Utils.pointOnCircle(this, radians);
@@ -85,19 +137,25 @@ public class Circle {
 
     public PVector getOppositePointOnCircleForAngle(float degrees) {
         double radians = Utils.degreeToRadians(Utils.floatToDouble(degrees));
-        return Utils.pointOnCircle(this, radians);
+        PVector pointOnCircle = Utils.pointOnCircle(this, radians);
+        float newX = this.center.x - (pointOnCircle.x - this.center.x);
+        float newY = this.center.y - (pointOnCircle.y - this.center.y);
+
+        return new PVector(newX, newY);
     }
 
     ;
 
-    public PVector computeRandomGaussianPointOnBetweenAngles(float start,float stop, float sigma){
+    public PVector computeRandomGaussianPointOnBetweenAngles(float start, float stop, float sigma) {
 
-        return Utils.randomGaussianPointOnCircleBetweenAngles(this,start,stop,sigma);
+        return Utils.randomGaussianPointOnCircleBetweenAngles(this, start, stop, sigma);
 
-    };
+    }
 
-    public PVector computeRandomPointOnBetweenAngles(float start,float stop) {
-        return Utils.randomPointOnCircleBetweenAngles(this,start,stop);
+    ;
+
+    public PVector computeRandomPointOnBetweenAngles(float start, float stop) {
+        return Utils.randomPointOnCircleBetweenAngles(this, start, stop);
     }
 
     ;
@@ -144,11 +202,13 @@ public class Circle {
         ArrayList<NotReallyAnArc> arcList = equalArcSubdivide(n);
         for (int i = 0; i < arcList.size(); i++) {
 
-            arcList.get(i).drawTriangleSubdivisionFill(sketch,depth, sigma);
+            arcList.get(i).drawTriangleSubdivisionFill(sketch, depth, sigma);
 
         }
 
-    };
+    }
+
+    ;
 
 
     public void draw(PApplet sketch) {
@@ -164,4 +224,12 @@ public class Circle {
     }
 
 
+    public float getAngleForPointOnCircle(PVector point) {
+        double degrees = Math.toDegrees(Math.atan2(point.y - this.center.y, point.x - this.center.x));
+        if (degrees < 0) {
+            return 360 + Utils.doubleToFloat(degrees);
+        } else {
+            return Utils.doubleToFloat(degrees);
+        }
+    }
 }

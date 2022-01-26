@@ -3,9 +3,6 @@ package modules.shapes;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 public class NotReallyAnArc implements Shape {
 
     public PVector A;
@@ -42,6 +39,7 @@ public class NotReallyAnArc implements Shape {
 
     ;
 
+    @Override
     public String toString() {
         return String.format("NotReallyAnArc(A=(%f,%f),B=(%f,%f),C=(%f,%f),start=%f,stop=%f)", A.x, A.y, B.x, B.y, C.x, C.y, this.refCircleAngleStart, this.refCircleAngleEnd);
     }
