@@ -85,7 +85,12 @@ public class Line {
 
     public ArrayList<PVector> divideInEqualParts(int n) {
         return Utils.divideLineIntoEqualParts(this, n);
+    }
 
+    ;
+
+    public ArrayList<Line> divideInEqualPartsAsLineCollection(int n) {
+        return Utils.pointCollectionToLineCollection(Utils.divideLineIntoEqualParts(this, n));
     }
 
     ;
@@ -139,6 +144,20 @@ public class Line {
     @Override
     public int hashCode() {
         return Objects.hash(start, end);
+    }
+
+
+    public static Line makePositiveRealLine(float upper) {
+
+        return new Line(new PVector(0, 0), new PVector(upper, 0));
+
+    }
+
+    public static Line makeRealLine(float lower, float upper) {
+        if(lower > upper){
+            throw new IllegalArgumentException("Parameter lower must less or equal than upp");
+        }
+        return new Line(new PVector(lower, 0), new PVector(upper, 0));
     }
 
     public PVector computeRandomGaussianPointOnLine(double sigma){

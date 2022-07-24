@@ -624,5 +624,23 @@ public class Utils {
 
     }
 
+
+
+    public ArrayList<PVector> makeGrid(PApplet sketch, int n){
+        ArrayList<Line> horizontalCoords = Line.makePositiveRealLine(sketch.width).divideInEqualPartsAsLineCollection(n);
+        ArrayList<Line> verticalCoords = Line.makePositiveRealLine(sketch.height).divideInEqualPartsAsLineCollection(n);
+
+        ArrayList<PVector> locations = new ArrayList<PVector>();
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n;j++){
+                PVector location = new PVector(horizontalCoords.get(i).getMidPoint().x,verticalCoords.get(j).getMidPoint().x);
+                locations.add(location);
+            }
+
+        }
+
+        return locations;
+    };
+
 }
 
