@@ -1,12 +1,10 @@
-package test.shapes;
+package modules.shapes;
 
-import modules.shapes.*;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import processing.core.PVector;
 
-
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ChordStripTest {
 

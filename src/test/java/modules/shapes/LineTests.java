@@ -1,13 +1,11 @@
-package test.shapes;
+package modules.shapes;
 
-import modules.shapes.Line;
-import modules.shapes.Utils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import processing.core.PVector;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LineTests {
     @Test
