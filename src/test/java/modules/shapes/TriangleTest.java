@@ -1,7 +1,6 @@
-package test.shapes;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-import modules.shapes.*;
+package modules.shapes;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 import processing.core.PVector;
 
 

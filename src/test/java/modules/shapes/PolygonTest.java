@@ -1,11 +1,11 @@
-package test.shapes;
+package modules.shapes;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import processing.core.PVector;
 import modules.shapes.Polygon;
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PolygonTest {
 

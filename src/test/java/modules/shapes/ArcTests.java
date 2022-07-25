@@ -1,12 +1,8 @@
-package test.shapes;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-import modules.shapes.*;
+package modules.shapes;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 import processing.core.PVector;
-
-import java.util.ArrayList;
-
-import org.junit.Test;
 
 public class ArcTests {
 
@@ -43,7 +39,6 @@ public class ArcTests {
         PVector B = new PVector(0,-1);
         PVector C = new PVector(-1,0);
         PVector D = new PVector(0,1);
-
         assertEquals(0,Utils.angleForPointOnCircleInDegrees(circle,A),0.01);
         assertEquals(270,Utils.angleForPointOnCircleInDegrees(circle,B),0.01);
         assertEquals(180,Utils.angleForPointOnCircleInDegrees(circle,C),0.01);

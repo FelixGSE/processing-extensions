@@ -1,6 +1,6 @@
-package test.shapes;
-import modules.shapes.NotReallyAQuadrilateral;
-import org.junit.Test;
+package modules.shapes;
+
+import org.junit.jupiter.api.Test;
 import processing.core.PVector;
 
 class NotReallyAQuadrilateralTest {

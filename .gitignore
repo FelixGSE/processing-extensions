@@ -1,4 +1,8 @@
 .DS_Store
 .idea/
 out/
+target/
 distribution/
+dependency-reduced-pom.xml
+processing-extensions.iml
+library/extensions.jar
